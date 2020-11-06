@@ -1,0 +1,13 @@
+[Unit]
+After=docker.service
+Requires=docker.service
+
+[Service]
+Type=oneshot
+WorkingDirectory=/opt/server
+ExecStart=/usr/local/bin/docker-compose up backup
+ExecStop=/usr/local/bin/docker-compose stop -t 60 backup
+ExecStopPost=/bin/sh -c '/usr/local/bin/docker-compose rm -f backup && /usr/bin/docker image prune -fa'
+
+[Install]
+WantedBy=multi-user.target

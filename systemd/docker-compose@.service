@@ -1,0 +1,14 @@
+[Unit]
+After=docker.service
+Requires=docker.service
+
+[Service]
+WorkingDirectory=/opt/server
+ExecStart=/usr/local/bin/docker-compose up %i
+ExecStop=/usr/local/bin/docker-compose stop -t 60 %i
+ExecStopPost=/bin/sh -c '/usr/local/bin/docker-compose rm -f %i && /usr/bin/docker image prune -fa'
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
