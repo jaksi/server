@@ -1,0 +1,58 @@
+(auth) {
+    @not_lan {
+        not {
+            remote_ip 192.168.1.1/32
+        }
+    }
+    basicauth @not_lan {
+        jaksi {$PASSWORD_HASH} {$PASSWORD_SALT}
+    }
+}
+
+(hsts) {
+    header Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
+}
+
+home.jaksi.dev {
+    import hsts
+    respond "Yo!"
+}
+
+test1.home.jaksi.dev {
+    import hsts
+    respond "Hey!"
+}
+
+test2.home.jaksi.dev {
+    import hsts
+    import auth
+    respond "Ho!"
+}
+
+prometheus.home.jaksi.dev {
+    import hsts
+    import auth
+    reverse_proxy prometheus:9090
+}
+
+grafana.home.jaksi.dev {
+    import hsts
+    import auth
+    reverse_proxy grafana:3000
+}
+
+homebridge.home.jaksi.dev {
+    import hsts
+    import auth
+    reverse_proxy nuc.home:8081
+}
+
+unifi.home.jaksi.dev {
+    import hsts
+    import auth
+    reverse_proxy https://unifi:8443 {
+        transport http {
+            tls_insecure_skip_verify
+        }
+    }
+}

@@ -1,0 +1,86 @@
+version: '3.7'
+services:
+  caddy:
+    build: caddy
+    ports:
+      - 80:80/tcp
+      - 443:443/tcp
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    environment:
+      - "PASSWORD_HASH=${CADDY_PASSWORD_HASH}"
+      - "PASSWORD_SALT=${CADDY_PASSWORD_SALT}"
+  unifi:
+    build: unifi
+    ports:
+      - 3478:3478/udp
+      - 8080:8080/tcp
+      - 6789:6789/tcp
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - unifi_data:/usr/lib/unifi/data
+  prometheus:
+    build: prometheus
+    command:
+      - --web.enable-admin-api
+      - --config.file=/etc/prometheus/prometheus.yml
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - prometheus:/prometheus
+  unifi-poller:
+    image: golift/unifi-poller
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - UP_UNIFI_DEFAULT_USER=unifi-poller
+      - "UP_UNIFI_DEFAULT_PASS=${UNIFIPOLLER_PASSWORD}"
+      - UP_UNIFI_DEFAULT_URL=https://unifi:8443
+      - UP_INFLUXDB_DISABLE=true
+  grafana:
+    image: grafana/grafana
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - grafana:/var/lib/grafana
+    environment:
+      - GF_INSTALL_PLUGINS=grafana-piechart-panel
+  deconz:
+    image: marthoc/deconz
+    network_mode: host
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - deconz:/root/.local/share/dresden-elektronik/deCONZ
+    devices:
+      - /dev/ttyACM0
+    environment:
+      - DECONZ_DEVICE=/dev/ttyACM0
+      - DECONZ_WEB_PORT=8090
+      - DECONZ_WS_PORT=8443
+  backup:
+    build: backup
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - dbxcli_config:/root/.config/dbxcli
+      - unifi_data:/unifi_data:ro
+      - prometheus:/prometheus:ro
+      - grafana:/grafana:ro
+      - deconz:/deconz:ro
+  blackbox-exporter:
+    build: blackbox-exporter
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+  deconz-exporter:
+    image: jaksi/deconz-exporter
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - deconz_exporter_api_keys:/api_keys
+volumes:
+  caddy_data:
+  caddy_config:
+  unifi_data:
+  prometheus:
+  grafana:
+  deconz:
+  dbxcli_config:
+  deconz_exporter_api_keys:
