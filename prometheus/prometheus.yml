@@ -3,21 +3,21 @@ global:
 scrape_configs:
   - job_name: node_nuc
     static_configs:
-      - targets: ['nuc.home:9100']
+      - targets: ["nuc.home:9100"]
   - job_name: unifi-poller
     static_configs:
-      - targets: ['unifi-poller:9130']
+      - targets: ["unifi-poller:9130"]
   - job_name: deconz
     static_configs:
-      - targets: ['deconz-exporter:9759']
-  - job_name: 'blackbox_icmp'
+      - targets: ["deconz-exporter:9759"]
+  - job_name: "blackbox_icmp"
     metrics_path: /probe
     params:
       module: [icmp]
     static_configs:
       - targets:
-        - 1.1.1.1
-        - 8.8.8.8
+          - 1.1.1.1
+          - 8.8.8.8
     relabel_configs:
       - source_labels: [__address__]
         target_label: __param_target
@@ -25,14 +25,14 @@ scrape_configs:
         target_label: instance
       - target_label: __address__
         replacement: blackbox-exporter:9115
-  - job_name: 'blackbox_tcp'
+  - job_name: "blackbox_tcp"
     metrics_path: /probe
     params:
       module: [tcp]
     static_configs:
       - targets:
-        - 1.1.1.1:443
-        - 8.8.8.8:443
+          - 1.1.1.1:443
+          - 8.8.8.8:443
     relabel_configs:
       - source_labels: [__address__]
         target_label: __param_target
@@ -40,14 +40,14 @@ scrape_configs:
         target_label: instance
       - target_label: __address__
         replacement: blackbox-exporter:9115
-  - job_name: 'blackbox_dns'
+  - job_name: "blackbox_dns"
     metrics_path: /probe
     params:
       module: [dns]
     static_configs:
       - targets:
-        - 1.1.1.1
-        - 8.8.8.8
+          - 1.1.1.1
+          - 8.8.8.8
     relabel_configs:
       - source_labels: [__address__]
         target_label: __param_target
