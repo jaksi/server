@@ -66,6 +66,7 @@ services:
       - prometheus:/prometheus:ro
       - grafana:/grafana:ro
       - deconz:/deconz:ro
+      - /home/jaksi:/host_home:ro
   blackbox-exporter:
     build: blackbox-exporter
     volumes:
@@ -75,6 +76,12 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - deconz_exporter_api_keys:/api_keys
+  code-server:
+    build: code-server
+    user: 1000:1000
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /home/jaksi:/home/coder
 volumes:
   caddy_data:
   caddy_config:

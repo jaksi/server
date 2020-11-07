@@ -56,3 +56,9 @@ unifi.home.jaksi.dev {
         }
     }
 }
+
+code-server.home.jaksi.dev {
+    import hsts
+    import auth
+    reverse_proxy http://code-server:8080
+}

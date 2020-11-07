@@ -14,3 +14,6 @@ tar -czf deconz.tar.gz -C /deconz --exclude=*.tar.gz .
 
 tar -czf prometheus.tar.gz -C "/prometheus/data/snapshots/$(curl -s -XPOST http://prometheus:9090/api/v1/admin/tsdb/snapshot | jq -r .data.name)" .
 /dbxcli put prometheus.tar.gz "backup/prometheus/${NOW}.tar.gz"
+
+tar -czf home.tar.gz -C /host_home
+/dbxcli put home.tar.gz "backup/home/${NOW}.tar.gz"
