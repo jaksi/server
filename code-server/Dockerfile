@@ -1,2 +1,2 @@
 FROM codercom/code-server
-RUN sudo apt-get -q update && sudo apt-get -y -q install python3-venv
+RUN sudo apt-get -q update && sudo apt-get -y -q install python3-venv bash-completion
