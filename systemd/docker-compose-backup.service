@@ -6,7 +6,7 @@ Requires=docker.service
 Type=oneshot
 WorkingDirectory=/opt/server
 ExecStart=/usr/local/bin/docker-compose up backup
-ExecStop=/usr/local/bin/docker-compose down -t 60 --rmi all -v --remove-orphans backup
+ExecStop=/usr/local/bin/docker-compose down -t 60 backup
 
 [Install]
 WantedBy=multi-user.target
