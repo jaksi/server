@@ -1,0 +1,40 @@
+#!/bin/bash
+set -euo pipefail
+
+cd /opt/server
+
+echo pull
+git pull
+
+echo disable and stop
+systemctl list-units 'docker-compose*' --no-legend | awk '{print $1}' | xargs -r systemctl disable --now
+
+echo rm
+rm /etc/systemd/system/docker-compose* || true
+
+echo reset-failed
+systemctl reset-failed
+
+echo rm
+docker-compose rm -fv
+
+echo purge
+docker image prune -fa
+
+echo cp
+cp systemd/* /etc/systemd/system/
+
+echo daemon-reload
+systemctl daemon-reload
+
+echo enable and start
+yq e '.services | keys | .[] | select(. != "backup")' docker-compose.yml | xargs -i systemctl enable --now docker-compose@{}.service
+
+echo backup
+systemctl enable --now docker-compose-backup.timer
+
+while true; do
+  clear
+  systemctl list-units 'docker-compose*'
+  sleep 1
+done
