@@ -5,7 +5,7 @@ Requires=docker.service
 [Service]
 WorkingDirectory=/opt/server
 ExecStart=/usr/local/bin/docker-compose up %i
-ExecStop=/usr/local/bin/docker-compose down -t 60 %i
+ExecStop=/usr/local/bin/docker-compose down -t 60 --rmi all -v --remove-orphans %i
 Restart=always
 RestartSec=10
 
