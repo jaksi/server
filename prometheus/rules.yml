@@ -1,4 +1,5 @@
 groups:
-  - rules:
+  - name: Alerts
+    rules:
       - alert: FilesystemAvailLow
         expr: node_filesystem_avail_bytes < 1000000000
