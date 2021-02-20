@@ -3,4 +3,4 @@ route:
 receivers:
   - name: pagerduty
     pagerduty_configs:
-      - service_key: something
+      - service_key: PAGERDUTY_INTEGRATION_KEY
