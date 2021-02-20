@@ -1,0 +1,6 @@
+route:
+  receiver: pagerduty
+receivers:
+  - name: pagerduty
+    pagerduty_configs:
+      - service_key: something

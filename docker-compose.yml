@@ -76,6 +76,11 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - deconz_exporter_api_keys:/api_keys
+  alertmanager:
+    build: alertmanager
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - alertmanager:/alertmanager
 volumes:
   caddy_data:
   caddy_config:
@@ -85,3 +90,4 @@ volumes:
   deconz:
   dbxcli_config:
   deconz_exporter_api_keys:
+  alertmanager:

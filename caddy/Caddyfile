@@ -35,6 +35,12 @@ prometheus.home.jaksi.dev {
     reverse_proxy prometheus:9090
 }
 
+alertmanager.home.jaksi.dev {
+    import hsts
+    import auth
+    reverse_proxy alertmanager:9093
+}
+
 grafana.home.jaksi.dev {
     import hsts
     import auth
