@@ -57,6 +57,6 @@ scrape_configs:
         replacement: blackbox-exporter:9115
 alerting:
   alertmanagers:
-    static_configs:
-      targets:
+    - static_configs:
+      - targets:
         - alertmanager:9093
