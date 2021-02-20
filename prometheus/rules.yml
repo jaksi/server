@@ -2,4 +2,4 @@ groups:
   - name: Alerts
     rules:
       - alert: FilesystemAvailLow
-        expr: node_filesystem_avail_bytes < 1000000000
+        expr: node_filesystem_avail_bytes / node_filesystem_size_bytes < 0.25
