@@ -81,6 +81,8 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - alertmanager:/alertmanager
+    environment:
+      - "PAGERDUTY_INTEGRATION_KEY=${PAGERDUTY_INTEGRATION_KEY}"
 volumes:
   caddy_data:
   caddy_config:
