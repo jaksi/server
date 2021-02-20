@@ -15,6 +15,9 @@ rm /etc/systemd/system/docker-compose* || true
 echo reset-failed
 systemctl reset-failed
 
+echo down
+docker-compose down --remove-orphans -t 60
+
 echo rm
 docker-compose rm -fv
 
