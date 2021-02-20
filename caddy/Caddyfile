@@ -44,7 +44,9 @@ alertmanager.home.jaksi.dev {
 grafana.home.jaksi.dev {
     import hsts
     import auth
-    reverse_proxy grafana:3000
+    reverse_proxy grafana:3000 {
+        header_up -authorization
+    }
 }
 
 homebridge.home.jaksi.dev {
