@@ -77,7 +77,7 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - deconz_exporter_api_keys:/api_keys
   alertmanager:
-    build: alertmanager
+    build:
       context: alertmanager
       args:
         - "PAGERDUTY_INTEGRATION_KEY=${PAGERDUTY_INTEGRATION_KEY}"
