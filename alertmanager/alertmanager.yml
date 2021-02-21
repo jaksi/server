@@ -1,7 +1,13 @@
+global:
+  smtp_from: ALERT_EMAIL_ADDRESS
+  smtp_smarthost: SMTP_HOST
+  smtp_auth_username: SMTP_AUTH_USERNAME
+  smtp_auth_password: SMTP_AUTH_PASSWORD
 route:
   group_by: [cluster]
-  receiver: pagerduty
+  receiver: email
 receivers:
-  - name: pagerduty
-    pagerduty_configs:
-      - service_key: PAGERDUTY_INTEGRATION_KEY
+  - name: email
+    email_configs:
+      - send_resolved: true
+        to: ALERT_EMAIL_ADDRESS

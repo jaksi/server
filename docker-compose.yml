@@ -80,7 +80,10 @@ services:
     build:
       context: alertmanager
       args:
-        - "PAGERDUTY_INTEGRATION_KEY=${PAGERDUTY_INTEGRATION_KEY}"
+        - "SMTP_HOST=${SMTP_HOST}"
+        - "SMTP_AUTH_USERNAME=${SMTP_AUTH_USERNAME}"
+        - "SMTP_AUTH_PASSWORD=${SMTP_AUTH_PASSWORD}"
+        - "ALERT_EMAIL_ADDRESS=${ALERT_EMAIL_ADDRESS}"
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - alertmanager:/alertmanager
