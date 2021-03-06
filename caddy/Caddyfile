@@ -49,12 +49,6 @@ grafana.home.jaksi.dev {
     }
 }
 
-homebridge.home.jaksi.dev {
-    import hsts
-    import auth
-    reverse_proxy nuc.home:8081
-}
-
 unifi.home.jaksi.dev {
     import hsts
     import auth
@@ -64,4 +58,3 @@ unifi.home.jaksi.dev {
         }
     }
 }
-
