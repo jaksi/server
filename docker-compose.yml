@@ -1,4 +1,4 @@
-version: "3.7"
+version: "3.8"
 services:
   caddy:
     build: caddy
@@ -12,6 +12,8 @@ services:
     environment:
       - "PASSWORD_HASH=${CADDY_PASSWORD_HASH}"
       - "PASSWORD_SALT=${CADDY_PASSWORD_SALT}"
+    networks:
+      - default
   unifi:
     build: unifi
     ports:
@@ -21,6 +23,8 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - unifi_data:/usr/lib/unifi/data
+    networks:
+      - default
   prometheus:
     build: prometheus
     command:
@@ -29,6 +33,8 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - prometheus:/prometheus
+    networks:
+      - default
   unifi-poller:
     image: golift/unifi-poller
     volumes:
@@ -38,6 +44,8 @@ services:
       - "UP_UNIFI_DEFAULT_PASS=${UNIFIPOLLER_PASSWORD}"
       - UP_UNIFI_DEFAULT_URL=https://unifi:8443
       - UP_INFLUXDB_DISABLE=true
+    networks:
+      - default
   grafana:
     image: grafana/grafana
     volumes:
@@ -45,6 +53,8 @@ services:
       - grafana:/var/lib/grafana
     environment:
       - GF_INSTALL_PLUGINS=grafana-piechart-panel
+    networks:
+      - default
   deconz:
     image: marthoc/deconz
     network_mode: host
@@ -57,6 +67,8 @@ services:
       - DECONZ_DEVICE=/dev/ttyACM0
       - DECONZ_WEB_PORT=8090
       - DECONZ_WS_PORT=8443
+    networks:
+      - default
   backup:
     build: backup
     volumes:
@@ -67,15 +79,21 @@ services:
       - grafana:/grafana:ro
       - deconz:/deconz:ro
       - /home/jaksi:/host_home:ro
+    networks:
+      - default
   blackbox-exporter:
     build: blackbox-exporter
     volumes:
       - /etc/localtime:/etc/localtime:ro
+    networks:
+      - default
   deconz-exporter:
     image: jaksi/deconz-exporter
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - deconz_exporter_api_keys:/api_keys
+    networks:
+      - default
   alertmanager:
     build:
       context: alertmanager
@@ -87,6 +105,8 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - alertmanager:/alertmanager
+    networks:
+      - default
 volumes:
   caddy_data:
   caddy_config:
@@ -97,3 +117,5 @@ volumes:
   dbxcli_config:
   deconz_exporter_api_keys:
   alertmanager:
+networks:
+  default:

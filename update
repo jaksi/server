@@ -3,37 +3,40 @@ set -euo pipefail
 
 cd /opt/server
 
-echo pull
+echo Updating repo
 git pull
 
-echo disable and stop
+echo Disabling and stopping systemd units
 systemctl list-units 'docker-compose*' --no-legend | awk '{print $1}' | xargs -r systemctl disable --now
 
-echo rm
+echo Removing systemd units
 rm /etc/systemd/system/docker-compose* || true
 
-echo reset-failed
+echo Resetting failed systemd units
 systemctl reset-failed
 
-echo down
+echo Stopping docker containers
 docker-compose down --remove-orphans -t 60
 
-echo rm
+echo Removing docker containers
 docker-compose rm -fv
 
-echo purge
+echo Pruning docker images
 docker image prune -fa
 
-echo cp
+echo Pruning docker networks
+docker network prune -f
+
+echo Installing systemd units
 cp systemd/* /etc/systemd/system/
 
-echo daemon-reload
+echo Reloading systemd
 systemctl daemon-reload
 
-echo enable and start
+echo Enabling and starting systemd services
 yq e '.services | keys | .[] | select(. != "backup")' docker-compose.yml | xargs -i systemctl enable --now docker-compose@{}.service
 
-echo backup
+echo Enabling the backup systemd timer
 systemctl enable --now docker-compose-backup.timer
 
 while true; do
