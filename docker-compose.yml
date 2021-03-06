@@ -67,8 +67,6 @@ services:
       - DECONZ_DEVICE=/dev/ttyACM0
       - DECONZ_WEB_PORT=8090
       - DECONZ_WS_PORT=8443
-    networks:
-      - default
   backup:
     build: backup
     volumes:
