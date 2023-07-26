@@ -1,16 +1,5 @@
 version: "3.8"
 services:
-  tailscale:
-    image: docker.io/tailscale/tailscale
-    volumes:
-      - tailscale-data:/var/lib/tailscale
-    devices:
-      - /dev/net/tun
-    network_mode: host
-    cap_add:
-      - NET_ADMIN
-      - NET_RAW
-    env_file: .env
   hubitat_exporter:
     image: ghcr.io/jaksi/hubitat_exporter
     environment:
