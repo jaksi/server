@@ -1,0 +1,50 @@
+{
+    order authenticate before respond
+    order authorize before basicauth
+
+    security {
+        oauth identity provider github {$GITHUB_CADDY_CLIENT_ID} {$GITHUB_CADDY_CLIENT_SECRET}
+
+        authentication portal github {
+            crypto default token lifetime 3600
+            cookie domain jaksi.dev
+            enable identity provider github
+            ui {
+                links {
+                    "My Identity" /whoami icon "las la-user"
+                    "Prometheus" https://prometheus.jaksi.dev/
+                    "Grafana" https://grafana.jaksi.dev/
+                    "Elasticsearch" https://elasticsearch.jaksi.dev/
+                    "Kibana" https://kibana.jaksi.dev/
+                }
+            }
+
+            transform user {
+                match realm github
+                match sub github.com/jaksi
+                action add role authp/admin
+            }
+        }
+
+        authorization policy github {
+            set auth url https://auth.jaksi.dev
+            allow roles authp/admin
+            validate bearer header
+            inject headers with claims
+        }
+    }
+}
+
+auth.jaksi.dev {
+    authenticate with github
+}
+
+prometheus.jaksi.dev {
+    authorize with github
+    reverse_proxy prometheus:9090
+}
+
+grafana.jaksi.dev {
+    authorize with github
+    reverse_proxy grafana:3000
+}

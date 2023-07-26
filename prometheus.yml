@@ -1,0 +1,6 @@
+global:
+  scrape_interval: 5s
+scrape_configs:
+  - job_name: hubitat
+    static_configs:
+      - targets: ['hubitat_exporter:1123']
