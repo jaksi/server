@@ -41,6 +41,7 @@ services:
       - caddy-config:/config
     env_file: .env
 volumes:
+  tailscale-data:
   prometheus-data:
   grafana-data:
   caddy-data:
